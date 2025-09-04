@@ -188,20 +188,21 @@ const getCurrentLocation = async () => {
   try {
     const res = await fetch("https://api.techniknews.net/ipgeo/");
     const data = await res.json();
+
+    return {
+      error: data.status !== "success",
+      place: data.status === "success" ? data.city : "Earth",
+      lat: data.status === "success" ? data.lat : 0.0,
+      lon: data.status === "success" ? data.lon : 0.0,
+    };
   } catch (error) {
     console.log(error);
     console.log("Failed to get the IP location from IPGEO.");
+
     return {
       error: true, place: "Earth", lat: 0.0, lon: 0.0
     };
   }
-
-  return {
-    error: data.status !== "success",
-    place: data.status === "success" ? data.city : "Earth",
-    lat: data.status === "success" ? data.lat : 0.0,
-    lon: data.status === "success" ? data.lon : 0.0,
-  };
 }
 
 const getWeatherData = async (lat, lon, days, hourly="", daily="", current="") => {
