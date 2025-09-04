@@ -185,8 +185,16 @@ const getForecastConditionSymbol = (forecastCode) => {
 }
 
 const getCurrentLocation = async () => {
-  const res = await fetch("https://api.techniknews.net/ipgeo/");
-  const data = await res.json();
+  try {
+    const res = await fetch("https://api.techniknews.net/ipgeo/");
+    const data = await res.json();
+  } catch (error) {
+    console.log(error);
+    console.log("Failed to get the IP location from IPGEO.");
+    return {
+      error: true, place: "Earth", lat: 0.0, lon: 0.0
+    };
+  }
 
   return {
     error: data.status !== "success",
